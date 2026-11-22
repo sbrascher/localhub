@@ -1,0 +1,127 @@
+<div class="app-shell">
+  <app-sidebar-rail
+    [activeFilter]="store.gitFilter()"
+    [refreshingAll]="store.refreshingAll()"
+    [stats]="store.stats()"
+    (filterChange)="setFilter($event)"
+    (refreshAll)="onRefreshAllGit()"
+    (openSettings)="openSettingsDialog()"
+    (createNew)="openCreateDialog()"
+  />
+
+  <main class="workspace">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="title-block">
+        <h1>Meus Projetos</h1>
+        <p>Gerencie suas POCs e repositórios sem perder o controle do que está no Git.</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="search-box">
+          <span class="material-symbols-rounded">search</span>
+          <input
+            type="search"
+            [value]="store.searchQuery()"
+            (input)="onSearchInput($event)"
+            placeholder="Buscar projeto, branch ou diretório..."
+          />
+        </div>
+
+        <button type="button" class="new-project-btn" (click)="openCreateDialog()">
+          <span class="material-symbols-rounded">add</span>
+          Novo Projeto
+        </button>
+      </div>
+    </header>
+
+    <!-- Summary Filter Pills -->
+    <section class="stats-strip" aria-label="Resumo e filtros Git">
+      <button
+        type="button"
+        class="stat-pill"
+        [class.active]="store.gitFilter() === 'all'"
+        (click)="setFilter('all')"
+      >
+        <span class="stat-label">Total</span>
+        <span class="stat-value">{{ store.stats().total }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="stat-pill"
+        [class.active]="store.gitFilter() === 'remote'"
+        (click)="setFilter('remote')"
+      >
+        <span class="dot remote"></span>
+        <span class="stat-label">Git Local + Remoto</span>
+        <span class="stat-value">{{ store.stats().withRemote }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="stat-pill"
+        [class.active]="store.gitFilter() === 'local-only'"
+        (click)="setFilter('local-only')"
+      >
+        <span class="dot local"></span>
+        <span class="stat-label">Só Git Local</span>
+        <span class="stat-value">{{ store.stats().localOnly }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="stat-pill"
+        [class.active]="store.gitFilter() === 'none'"
+        (click)="setFilter('none')"
+      >
+        <span class="dot none"></span>
+        <span class="stat-label">Sem Git</span>
+        <span class="stat-value">{{ store.stats().withoutGit }}</span>
+      </button>
+    </section>
+
+    <!-- Cards Grid -->
+    <section class="content-area">
+      @if (store.loading()) {
+        <div class="empty-state">
+          <div class="empty-orb">...</div>
+          <h3>Carregando projetos</h3>
+          <p>Lendo base local SQLite...</p>
+        </div>
+      } @else if (store.filteredProjects().length === 0) {
+        <div class="empty-state">
+          <div class="empty-orb">
+            <span class="material-symbols-rounded">create_new_folder</span>
+          </div>
+          @if (store.projects().length === 0) {
+            <h3>Nenhum projeto cadastrado ainda</h3>
+            <p>Adicione seu primeiro projeto ou POC para mapear o diretório e o status no Git.</p>
+            <button type="button" class="new-project-btn" (click)="openCreateDialog()">
+              Criar Primeiro Projeto
+            </button>
+          } @else {
+            <h3>Nenhum projeto encontrado</h3>
+            <p>Nenhum item corresponde à busca ou filtro selecionado.</p>
+            <button type="button" class="reset-btn" (click)="setFilter('all'); store.searchQuery.set('')">
+              Limpar Filtros
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="cards-grid">
+          @for (project of store.filteredProjects(); track project.id) {
+            <app-project-card
+              [project]="project"
+              (edit)="openEditDialog($event)"
+              (remove)="onDeleteProject($event)"
+              (refreshGit)="onRefreshProjectGit($event)"
+              (openFolder)="onOpenFolder($event)"
+              (openVSCode)="onOpenVSCode($event)"
+            />
+          }
+        </div>
+      }
+    </section>
+  </main>
+</div>

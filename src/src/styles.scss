@@ -1,0 +1,142 @@
+@use '@angular/cdk/overlay-prebuilt.css';
+
+:root {
+  /* Palette - Warm Charcoal Tactile Dark UI */
+  --bg-canvas: #181816;
+  --bg-shell: #20201e;
+  --bg-panel: #252522;
+  --bg-surface: #2a2a27;
+  --bg-surface-elevated: linear-gradient(180deg, #2d2d2a 0%, #262623 100%);
+  --bg-recessed: #1a1a18;
+  --bg-recessed-soft: #1e1e1c;
+  --bg-hover: #32322e;
+
+  /* Text */
+  --text-primary: #f2f2ef;
+  --text-secondary: #9c9b94;
+  --text-muted: #6e6d67;
+
+  /* Accent (Coral-Red from reference) */
+  --accent: #f06464;
+  --accent-hover: #f27979;
+  --accent-soft: rgba(240, 100, 100, 0.14);
+  --accent-border: rgba(240, 100, 100, 0.34);
+  --accent-glow: 0 8px 20px -6px rgba(240, 100, 100, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  /* Semantic Git Colors */
+  --git-remote-bg: rgba(52, 211, 153, 0.12);
+  --git-remote-text: #4ade80;
+  --git-remote-border: rgba(52, 211, 153, 0.28);
+
+  --git-local-bg: rgba(240, 100, 100, 0.13);
+  --git-local-text: #f27474;
+  --git-local-border: rgba(240, 100, 100, 0.3);
+
+  --git-none-bg: rgba(156, 155, 148, 0.1);
+  --git-none-text: #9c9b94;
+  --git-none-border: rgba(255, 255, 255, 0.08);
+
+  --danger: #f06464;
+  --danger-soft: rgba(240, 100, 100, 0.14);
+
+  /* Tactile Dark Shadows & Borders */
+  --shadow-relief-sm:
+    0 2px 6px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  --shadow-relief-md:
+    0 10px 24px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
+  --shadow-relief-hover:
+    0 16px 32px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  --shadow-inset:
+    inset 0 2px 5px rgba(0, 0, 0, 0.48),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+
+  --border-relief: 1px solid rgba(255, 255, 255, 0.08);
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+
+  /* Radii */
+  --radius-xl: 18px;
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-pill: 9999px;
+
+  /* Fonts */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 19px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  user-select: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* CDK Dialog Backdrop & Container */
+.cdk-overlay-backdrop.tactile-backdrop {
+  background: rgba(12, 12, 11, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.tactile-dialog-panel {
+  max-width: 94vw;
+  max-height: 92vh;
+  outline: none;
+}

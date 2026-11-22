@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+src/node_modules/
+
+# Build & Release outputs
+release/
+src/dist/
+src/dist-electron/
+src/.angular/
+src/out-tsc/
+
+# Local SQLite databases & covers
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db

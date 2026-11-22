@@ -1,0 +1,96 @@
+<article class="card">
+  <!-- Cover Area -->
+  <div class="card-cover" [class.has-image]="project().coverUrl">
+    @if (project().coverUrl; as coverUrl) {
+      <img [src]="coverUrl" [alt]="project().name" class="cover-img" />
+    } @else {
+      <div class="cover-placeholder">
+        <div class="placeholder-orb">{{ monogram() }}</div>
+      </div>
+    }
+
+    <span class="git-pill-floating" [class]="gitStatusClass()">
+      <span class="dot"></span>
+      {{ gitSummaryLabel() }}
+    </span>
+  </div>
+
+  <!-- Body -->
+  <div class="card-body">
+    <div class="card-header-row">
+      <h3 class="card-title" [title]="project().name">{{ project().name }}</h3>
+      @if (project().gitBranch) {
+        <span class="branch-pill" [title]="'Branch: ' + project().gitBranch">
+          <span class="material-symbols-rounded branch-icon">fork_right</span>
+          {{ project().gitBranch }}
+        </span>
+      }
+    </div>
+
+    @if (project().description) {
+      <p class="card-desc">{{ project().description }}</p>
+    } @else {
+      <p class="card-desc empty">Sem descrição cadastrada.</p>
+    }
+
+    <!-- Directory Path Pill -->
+    <button
+      type="button"
+      class="path-pill"
+      (click)="openFolder.emit(project())"
+      [title]="'Abrir pasta: ' + project().directoryPath"
+    >
+      <span class="material-symbols-rounded path-icon">folder</span>
+      <span class="path-text">{{ project().directoryPath }}</span>
+    </button>
+
+    <!-- Git Indicators Matrix -->
+    <div class="git-matrix">
+      <div class="git-flag" [class.active]="project().hasLocalGit">
+        <span class="flag-dot"></span>
+        <span>Git Local: <strong>{{ project().hasLocalGit ? 'Sim' : 'Não' }}</strong></span>
+      </div>
+      <div class="git-flag" [class.active]="project().hasRemoteGit" [title]="project().remoteUrl || 'Sem repositório remoto'">
+        <span class="flag-dot"></span>
+        <span>Git Remoto: <strong>{{ project().hasRemoteGit ? 'Sim' : 'Não' }}</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <footer class="card-actions">
+    @if (confirmingDelete()) {
+      <div class="confirm-bar">
+        <span class="confirm-text">Excluir projeto?</span>
+        <div class="confirm-btns">
+          <button type="button" class="action-btn danger" (click)="onDeleteClick()">Confirmar</button>
+          <button type="button" class="action-btn" (click)="cancelDelete()">Cancelar</button>
+        </div>
+      </div>
+    } @else {
+      <div class="actions-left">
+        <button type="button" class="icon-btn" (click)="openFolder.emit(project())" title="Abrir pasta no Explorer">
+          <span class="material-symbols-rounded">open_in_new</span>
+        </button>
+
+        <button type="button" class="icon-btn" (click)="openVSCode.emit(project())" title="Abrir no VS Code">
+          <span class="material-symbols-rounded">code</span>
+        </button>
+
+        <button type="button" class="icon-btn" (click)="refreshGit.emit(project())" title="Re-escanear status Git">
+          <span class="material-symbols-rounded">sync</span>
+        </button>
+      </div>
+
+      <div class="actions-right">
+        <button type="button" class="icon-btn" (click)="edit.emit(project())" title="Editar projeto">
+          <span class="material-symbols-rounded">edit</span>
+        </button>
+
+        <button type="button" class="icon-btn danger" (click)="onDeleteClick()" title="Excluir projeto">
+          <span class="material-symbols-rounded">delete</span>
+        </button>
+      </div>
+    }
+  </footer>
+</article>

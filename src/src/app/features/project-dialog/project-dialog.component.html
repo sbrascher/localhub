@@ -1,0 +1,140 @@
+<div class="dialog-shell" cdkTrapFocus cdkTrapFocusAutoCapture>
+  <header class="dialog-header">
+    <div>
+      <h2>{{ isEditMode ? 'Editar Projeto' : 'Novo Projeto' }}</h2>
+      <p>Associe o diretório local e acompanhe rapidamente o status do Git.</p>
+    </div>
+    <button type="button" class="close-btn" (click)="close()" aria-label="Fechar">
+      <span class="material-symbols-rounded">close</span>
+    </button>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="dialog-form">
+    <!-- Directory Picker -->
+    <div class="field">
+      <label for="directoryPath">Diretório do Projeto *</label>
+      <div class="dir-row">
+        <input
+          id="directoryPath"
+          type="text"
+          formControlName="directoryPath"
+          placeholder="Ex: D:\Projetos\minha-poc"
+          class="tactile-input"
+        />
+        <button type="button" class="tactile-btn" (click)="pickDirectory()">
+          Selecionar Pasta
+        </button>
+        <button
+          type="button"
+          class="tactile-btn subtle"
+          (click)="detectGit()"
+          [disabled]="detectingGit() || !form.controls.directoryPath.value.trim()"
+          title="Detectar Git na pasta informada"
+        >
+          {{ detectingGit() ? 'Lendo...' : 'Detectar Git' }}
+        </button>
+      </div>
+      @if (form.controls.directoryPath.touched && form.controls.directoryPath.invalid) {
+        <span class="field-error">Informe o diretório do projeto.</span>
+      }
+    </div>
+
+    <!-- Name -->
+    <div class="field">
+      <label for="name">Nome *</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Ex: Gerenciador de Projetos / POC Auth"
+        class="tactile-input"
+      />
+      @if (form.controls.name.touched && form.controls.name.invalid) {
+        <span class="field-error">O nome do projeto é obrigatório.</span>
+      }
+    </div>
+
+    <!-- Description -->
+    <div class="field">
+      <label for="description">Descrição (opcional)</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="2"
+        placeholder="Resumo rápido do objetivo do projeto ou POC..."
+        class="tactile-input textarea"
+      ></textarea>
+    </div>
+
+    <!-- Git Status Section -->
+    <div class="git-box">
+      <div class="git-box-header">
+        <span class="git-box-title">Associação Git</span>
+        @if (gitMessage()) {
+          <span class="git-box-note">{{ gitMessage() }}</span>
+        }
+      </div>
+
+      <div class="git-toggles">
+        <label class="toggle-card">
+          <input type="checkbox" formControlName="hasLocalGit" />
+          <span class="toggle-indicator"></span>
+          <span>Possui Git Local</span>
+        </label>
+
+        <label class="toggle-card">
+          <input type="checkbox" formControlName="hasRemoteGit" />
+          <span class="toggle-indicator"></span>
+          <span>Possui Git Remoto</span>
+        </label>
+      </div>
+
+      @if (form.controls.hasLocalGit.value || form.controls.hasRemoteGit.value) {
+        <div class="git-meta-grid">
+          <div class="field">
+            <label for="gitBranch">Branch</label>
+            <input id="gitBranch" type="text" formControlName="gitBranch" placeholder="main" class="tactile-input" />
+          </div>
+          <div class="field">
+            <label for="remoteUrl">Remote URL</label>
+            <input
+              id="remoteUrl"
+              type="text"
+              formControlName="remoteUrl"
+              placeholder="https://github.com/..."
+              class="tactile-input"
+            />
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Optional Cover -->
+    <div class="field">
+      <label>Capa do Projeto (opcional)</label>
+      <div class="cover-picker">
+        @if (coverPreviewUrl(); as preview) {
+          <img [src]="preview" alt="Preview da capa" class="cover-preview" />
+        } @else {
+          <div class="cover-empty">Sem imagem de capa</div>
+        }
+
+        <div class="cover-actions">
+          <button type="button" class="tactile-btn" (click)="pickCover()">
+            {{ coverPreviewUrl() ? 'Trocar Capa' : 'Escolher Imagem' }}
+          </button>
+          @if (coverPreviewUrl()) {
+            <button type="button" class="tactile-btn subtle" (click)="clearCover()">Remover</button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <footer class="dialog-footer">
+      <button type="button" class="tactile-btn subtle" (click)="close()">Cancelar</button>
+      <button type="submit" class="primary-btn">
+        {{ isEditMode ? 'Salvar Alterações' : 'Criar Projeto' }}
+      </button>
+    </footer>
+  </form>
+</div>

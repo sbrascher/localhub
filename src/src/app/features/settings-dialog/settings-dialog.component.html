@@ -1,0 +1,74 @@
+<div class="settings-shell" cdkTrapFocus cdkTrapFocusAutoCapture>
+  <header class="settings-header">
+    <div class="header-title">
+      <div class="header-icon">
+        <span class="material-symbols-rounded">database</span>
+      </div>
+      <div>
+        <h2>Configurações do Banco de Dados</h2>
+        <p>Escolha onde o arquivo SQLite e as capas dos projetos ficam salvos.</p>
+      </div>
+    </div>
+
+    <button type="button" class="close-btn" (click)="close()" aria-label="Fechar">
+      <span class="material-symbols-rounded">close</span>
+    </button>
+  </header>
+
+  <div class="db-card">
+    <div class="db-meta-row">
+      <span class="db-label">Caminho Atual</span>
+      <span class="db-badge" [class.custom]="store.dbConfig().isCustom">
+        {{ store.dbConfig().isCustom ? 'Personalizado' : 'Padrão' }}
+      </span>
+    </div>
+
+    <div class="db-path-box" [title]="store.dbConfig().dbPath">
+      <span class="material-symbols-rounded">folder_open</span>
+      <span class="db-path-text">{{ store.dbConfig().dbPath || 'Carregando...' }}</span>
+    </div>
+
+    <p class="db-hint">
+      Ao escolher uma nova pasta, o banco atual e as capas são copiados automaticamente caso ainda não exista um
+      <code>projects.db</code> no destino.
+    </p>
+  </div>
+
+  @if (feedback(); as msg) {
+    <div class="feedback-pill">
+      <span class="material-symbols-rounded">check_circle</span>
+      <span>{{ msg }}</span>
+    </div>
+  }
+
+  <div class="actions-grid">
+    <button type="button" class="tactile-action" [disabled]="busy()" (click)="chooseFolder()">
+      <span class="material-symbols-rounded">create_new_folder</span>
+      <div>
+        <strong>Escolher Pasta</strong>
+        <small>Salvar projects.db em outro diretório</small>
+      </div>
+    </button>
+
+    <button type="button" class="tactile-action" [disabled]="busy()" (click)="chooseExistingFile()">
+      <span class="material-symbols-rounded">file_open</span>
+      <div>
+        <strong>Abrir .db Existente</strong>
+        <small>Conectar a um arquivo SQLite já existente</small>
+      </div>
+    </button>
+  </div>
+
+  <footer class="settings-footer">
+    @if (store.dbConfig().isCustom) {
+      <button type="button" class="tactile-btn subtle" [disabled]="busy()" (click)="resetToDefault()">
+        <span class="material-symbols-rounded">restart_alt</span>
+        Restaurar Padrão
+      </button>
+    } @else {
+      <span></span>
+    }
+
+    <button type="button" class="primary-btn" (click)="close()">Concluir</button>
+  </footer>
+</div>

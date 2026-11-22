@@ -1,0 +1,99 @@
+<aside class="sidebar" aria-label="Navegação principal">
+  <div class="sidebar-header" title="LocalHub">
+    <div class="brand-tile">
+      <span class="material-symbols-rounded">deployed_code</span>
+    </div>
+    <span class="brand-title">LocalHub</span>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-label">WORKSPACE</span>
+    <nav class="nav-list">
+      <button
+        type="button"
+        class="nav-item"
+        [class.active]="activeFilter() === 'all'"
+        (click)="filterChange.emit('all')"
+      >
+        <span class="material-symbols-rounded">home</span>
+        <span class="nav-text">Todos</span>
+        @if (stats().total > 0) {
+          <span class="nav-count">{{ stats().total }}</span>
+        }
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        [class.active]="activeFilter() === 'remote'"
+        (click)="filterChange.emit('remote')"
+      >
+        <span class="material-symbols-rounded">cloud_done</span>
+        <span class="nav-text">Git Remoto</span>
+        @if (stats().withRemote > 0) {
+          <span class="nav-count">{{ stats().withRemote }}</span>
+        }
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        [class.active]="activeFilter() === 'local-only'"
+        (click)="filterChange.emit('local-only')"
+      >
+        <span class="material-symbols-rounded">fork_right</span>
+        <span class="nav-text">Só Local</span>
+        @if (stats().localOnly > 0) {
+          <span class="nav-count alert">{{ stats().localOnly }}</span>
+        }
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        [class.active]="activeFilter() === 'none'"
+        (click)="filterChange.emit('none')"
+      >
+        <span class="material-symbols-rounded">block</span>
+        <span class="nav-text">Sem Git</span>
+        @if (stats().withoutGit > 0) {
+          <span class="nav-count">{{ stats().withoutGit }}</span>
+        }
+      </button>
+    </nav>
+  </div>
+
+  <div class="nav-group">
+    <span class="nav-label">SISTEMA</span>
+    <nav class="nav-list">
+      <button
+        type="button"
+        class="nav-item"
+        [class.spinning]="refreshingAll()"
+        [disabled]="refreshingAll()"
+        (click)="refreshAll.emit()"
+      >
+        <span class="material-symbols-rounded">sync</span>
+        <span class="nav-text">{{ refreshingAll() ? 'Escaneando...' : 'Atualizar Git' }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="nav-item"
+        (click)="openSettings.emit()"
+      >
+        <span class="material-symbols-rounded">database</span>
+        <span class="nav-text">Banco de Dados</span>
+      </button>
+
+      <button
+        type="button"
+        class="nav-item accent"
+        (click)="createNew.emit()"
+      >
+        <span class="material-symbols-rounded">add_circle</span>
+        <span class="nav-text">Novo Projeto</span>
+      </button>
+    </nav>
+  </div>
+</aside>
